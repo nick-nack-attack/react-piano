@@ -21,6 +21,8 @@ export type Note = {
     octave: OctaveIndex;
 }
 
+export type Optional<TEntity> = TEntity | null;
+
 const C1_MIDI_NUMBER = 24;
 const C4_MIDI_NUMBER = 60;
 const B5_MIDI_NUMBER = 83;
