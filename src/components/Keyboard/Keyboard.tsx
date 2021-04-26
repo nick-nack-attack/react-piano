@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { selectKey } from "../../domain/keyboard";
 import { notes, MidiValue } from "../../domain/note";
-import { Key } from "../Key";
+import { Key } from "../Key/Key";
 import styles from "./Keyboard.module.css";
 
 export type KeyboardProps = {

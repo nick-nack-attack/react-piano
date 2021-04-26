@@ -1,4 +1,4 @@
-import {InstrumentName, Player} from "soundfont-player";
+import { InstrumentName, Player } from "soundfont-player";
 import { MidiValue } from "./note";
 import { Optional } from "./types";
 
