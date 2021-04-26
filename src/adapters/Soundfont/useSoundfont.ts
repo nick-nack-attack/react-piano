@@ -29,3 +29,44 @@ export function useSoundfont({ AudioContext }: Settings): Adapted {
     const [player, setPlayer] = useState<Optional<Player>>(null);
     const audio = useRef(new AudioContext());
 }
+
+// Soundfont's instrument() is async, too
+async function load(instrument: InstrumentName = DEFAULT_INSTRUMENT) {
+    setLoading(true);
+
+    const player = await Soundfont.instrument(audio.current, instrument);
+
+    setLoading(false);
+    setCurrent(instrument);
+    setPlayer(player);
+}
+
+async function play(note: MidiValue) {
+    await resume();
+    if (!player) return;
+
+    const node = player.play(note.toString());
+    activeNodes = {...activeNodes, [note]: node }
+}
+
+async function stop(note: MidiValue) {
+    await resume();
+    // This exclamation mark in the stop() function is a non-null assertion operator.
+    if (!activeNodes[note])!.stop();
+    activeNodes = { ...activeNodes, [note]: null };
+}
+
+// This function checks what state audio is in right now.
+// If it is suspended that means that AudioContext is halting audio hardware access and reducing CPU/battery usage in the process.
+// To continue we have to resume() it.
+// And since it also has an async interface we have to implement our resume() wrapper as async too.
+async function resume() {
+    return audio.current.state === "suspended"
+        ? await audio.current.resume()
+        : Promise.resolve()
+}
+
+return {
+    loading, current,
+    load, play, stop
+}
